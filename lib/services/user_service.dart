@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:dio/dio.dart';
+import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../model/user_model.dart';
@@ -43,7 +44,7 @@ class UserService {
   Future<UserModel> createUser(UserModel user) async {
     try {
       final response = await _dio.post(endpoint, data: user.toJson());
-      if (response.statusCode == 200) {
+      if (response.statusCode == 201) {
         await _updateCache(user);
         return UserModel.fromJson(response.data);
       }
