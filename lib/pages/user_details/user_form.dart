@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:sprints_profile_management_project/utils/custom_text_field.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({super.key});
@@ -28,16 +27,6 @@ class _UserFormState extends State<UserForm> {
         child: Column(
           children: [
             SizedBox(height: 10),
-            CustomTextFormField(
-              controller: nameController, 
-              label: "Name",
-              validator: (value) {
-                if (value != null && value.trim().isEmpty) {
-                  return 'Name Can\'t be empty';
-                }
-                return null;
-              },
-            ),
                 TextFormField(
                   controller: phoneController,
                   validator: (value) {

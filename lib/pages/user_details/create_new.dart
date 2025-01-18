@@ -1,5 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
+import 'package:provider/provider.dart';
+import 'package:sprints_profile_management_project/theme/theme.dart';
+import 'package:sprints_profile_management_project/theme/theme_provider.dart';
+import 'package:sprints_profile_management_project/utils/navigation.dart';
 
 class CreateUser extends StatefulWidget {
   const CreateUser({Key? key}) : super(key: key);
@@ -9,7 +13,6 @@ class CreateUser extends StatefulWidget {
 }
 
 class _CreateUserState extends State<CreateUser> {
-  final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
   String gender = "Male";
   var list_item = ["Male", "Female"];
   
@@ -27,73 +30,63 @@ class _CreateUserState extends State<CreateUser> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<ThemeMode>(
-        valueListenable: _notifier,
-        builder: (_, mode, __) {
-          return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              themeMode: mode,
-              theme: ThemeData.light(),
-              darkTheme: ThemeData.dark(),
-              home: Scaffold(
-                  body: Padding(
-                padding: const EdgeInsets.only(
-                  top: 20,
-                ),
-                child: ListView(
-                  children: [
-                    Row(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(10.0),
-                          child: IconButton(
-                              onPressed: () {
-                                Navigator.pop(context);
-                              },
-                              icon: Icon(Icons.arrow_back)),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.all(8.0),
-                          child: Text(
-                            'Create New',
-                            style: TextStyle(
-                                fontWeight: FontWeight.bold, fontSize: 32),
-                          ),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.15,
-                        ),
-                        IconButton(
-                          icon: Icon((click == false)
-                              ? Icons.light_mode
-                              : Icons.dark_mode),
-                          onPressed: () {
-                            _notifier.value = mode == ThemeMode.light
-                                ? ThemeMode.dark
-                                : ThemeMode.light;
-                            setState(() {
-                              click = !click;
-                            });
-                          },
-                        )
-                      ],
-                    ),
-                    SizedBox(
-                      height: 10,
-                    ),
-                    Form(
-                        key: _formKey,
-                        child: Column(children: [
-                          Padding(
-                            padding: const EdgeInsets.all(10.0),
-                            child: TextFormField(
-                              controller: name_controller,
-                              validator: (value) {
-                                if (value == null || value.isEmpty) {
-                                  return "please enter a valid email";
-                                }
-                                return null;
-                              },
+    return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).colorScheme.inversePrimary,
+        toolbarHeight: MediaQuery.of(context).size.height*0.1,
+        leading:  IconButton(
+          onPressed: () {
+            context.pop();
+          },
+          style: IconButton.styleFrom(
+            shape: CircleBorder(),
+            backgroundColor: Colors.white
+          ),
+          icon: Icon(
+            Icons.arrow_back,
+            color: Colors.black,
+          )
+        ),
+        title: Text(
+          "Create New",
+          style: TextStyle(
+            fontSize: MediaQuery.of(context).size.height*0.04,
+            fontWeight: FontWeight.bold,
+            color: Theme.of(context).colorScheme.primary
+          ),
+        ),
+        actions: [
+          IconButton(
+            onPressed: () {
+              Provider.of<ThemeProvider>(context, listen: false).toggleTheme();
+              setState(() {
+              });
+            }, 
+            icon: Icon(
+              Provider.of<ThemeProvider>(context, listen: false).themeData == lightMode ? 
+                Icons.light_mode : Icons.dark_mode,
+              color: Theme.of(context).colorScheme.primary
+            )
+          )
+        ],
+      ),
+      body: ListView(
+        children: [
+          SizedBox(height: 10,),
+          Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.all(10.0),
+                  child: TextFormField(
+                  controller: name_controller,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "please enter a valid email";
+                    }
+                    return null;
+                  },
                               decoration: InputDecoration(
                                   enabledBorder: OutlineInputBorder(
                                     borderSide: const BorderSide(
@@ -383,10 +376,11 @@ class _CreateUserState extends State<CreateUser> {
                                     style: TextStyle(
                                         fontSize: 15, color: Colors.white),
                                   ))),
-                        ])),
-                  ],
-                ),
-              )));
-        });
+              ]
+            )
+          ),
+        ],     
+      )
+    );
   }
 }
