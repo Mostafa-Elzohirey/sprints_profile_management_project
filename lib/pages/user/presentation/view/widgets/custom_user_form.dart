@@ -21,7 +21,7 @@ class CustomUserForm extends StatelessWidget {
   final TextEditingController? phoneController;
   final TextEditingController? genderController;
   final TextEditingController? addressController;
-  final UserModel? userModel;
+  final User? userModel;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -43,7 +43,7 @@ class CustomUserForm extends StatelessWidget {
                 label: 'Phone Number',
                 enableFill: false,
                 controller: phoneController,
-                initalText: userModel?.phone,
+                initalText: userModel?.phoneNumber,
                 isReadOnly: isReadOnly,
               ),
             ),
@@ -53,7 +53,7 @@ class CustomUserForm extends StatelessWidget {
                   enableFill: false,
                   controller: ageController,
                   isReadOnly: isReadOnly,
-                  initalText: userModel?.age),
+                  initalText: userModel?.age.toString()),
             ),
           ],
         ),
@@ -70,25 +70,27 @@ class CustomUserForm extends StatelessWidget {
             Expanded(
               child: CustomTextFormField(
                   label: 'Age',
-                  suffixWidget:isReadOnly?null: PopupMenuButton(
-                    icon: Icon(Icons.keyboard_arrow_down_outlined),
-                    itemBuilder: (context) {
-                      return [
-                        PopupMenuItem(
-                            onTap: () {},
-                            child: Text(
-                              "Male",
-                              style: AppFontStyle.bold16,
-                            )),
-                        PopupMenuItem(
-                            onTap: () {},
-                            child: Text(
-                              "Female",
-                              style: AppFontStyle.bold16,
-                            )),
-                      ];
-                    },
-                  ),
+                  suffixWidget: isReadOnly
+                      ? null
+                      : PopupMenuButton(
+                          icon: Icon(Icons.keyboard_arrow_down_outlined),
+                          itemBuilder: (context) {
+                            return [
+                              PopupMenuItem(
+                                  onTap: () {},
+                                  child: Text(
+                                    "Male",
+                                    style: AppFontStyle.bold16,
+                                  )),
+                              PopupMenuItem(
+                                  onTap: () {},
+                                  child: Text(
+                                    "Female",
+                                    style: AppFontStyle.bold16,
+                                  )),
+                            ];
+                          },
+                        ),
                   enableFill: false,
                   controller: ageController,
                   isReadOnly: isReadOnly,
@@ -96,7 +98,7 @@ class CustomUserForm extends StatelessWidget {
             ),
             Expanded(
               child: CustomTextFormField(
-                label: 'address',
+                  label: 'address',
                   enabled: true,
                   enableFill: false,
                   controller: addressController,
