@@ -50,33 +50,39 @@ class UserCard extends StatelessWidget {
               color: Colors.black,
               size: 50,
             ),
-            subtitle: Container(
-              decoration: BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.all(Radius.circular(30)),
-              ),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  IconButton(
-                      onPressed: () {},
-                      style: IconButton.styleFrom(
-                          shape: CircleBorder(),
-                          backgroundColor: backGroundColor),
-                      icon: Icon(Icons.mail, color: Colors.black)),
-                  IconButton(
-                      onPressed: () {},
-                      style: IconButton.styleFrom(
-                          shape: CircleBorder(),
-                          backgroundColor: backGroundColor),
-                      icon: Icon(Icons.phone, color: Colors.black)),
-                ],
-              ),
-            ),
-            title: Text(
-              "Item $index",
-              style:
-                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            title: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  "Item $index",
+                  style: TextStyle(
+                      color: Colors.black, fontWeight: FontWeight.bold),
+                ),
+                Container(
+                  width: 100,
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    borderRadius: BorderRadius.all(Radius.circular(30)),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      IconButton(
+                          onPressed: () {},
+                          style: IconButton.styleFrom(
+                              shape: CircleBorder(),
+                              backgroundColor: backGroundColor),
+                          icon: Icon(Icons.mail, color: Colors.black)),
+                      IconButton(
+                          onPressed: () {},
+                          style: IconButton.styleFrom(
+                              shape: CircleBorder(),
+                              backgroundColor: backGroundColor),
+                          icon: Icon(Icons.phone, color: Colors.black)),
+                    ],
+                  ),
+                ),
+              ],
             ),
             trailing: IconButton(
                 onPressed: () {

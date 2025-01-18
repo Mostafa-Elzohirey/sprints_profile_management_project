@@ -18,31 +18,35 @@ class _UserListPageState extends State<UserListPage> {
     final provider = Provider.of<ThemeProvider>(context, listen: false);
     return SafeArea(
       child: Scaffold(
-        body: Column(
-          children: [
-            UserListAppBar(provider: provider),
-            Expanded(
-                child: ListView.separated(
-                  key: ValueKey(items.length),
-                    separatorBuilder: (context, index) {
-                      return SizedBox(
-                        height: 16,
-                      );
-                    },
-                    itemCount: items.length,
-                    padding: const EdgeInsets.symmetric(
-                        vertical: 16, horizontal: 12),
-                    itemBuilder: (BuildContext context, int index) {
-                      return UserCard(
-                        index: index,
-                        delete: (currIndex) {
-                          setState(() {
-                            items.removeAt(currIndex);
-                          });
-                        },
-                      );
-                    })),
-          ],
+        body: Padding(
+          padding: EdgeInsets.symmetric(horizontal: 12),
+          child: Column(
+            children: [
+              UserListAppBar(provider: provider),
+              Expanded(
+                  child: ListView.separated(
+                      key: ValueKey(items.length),
+                      separatorBuilder: (context, index) {
+                        return SizedBox(
+                          height: 16,
+                        );
+                      },
+                      itemCount: items.length,
+                      padding: const EdgeInsets.symmetric(
+                        vertical: 16,
+                      ),
+                      itemBuilder: (BuildContext context, int index) {
+                        return UserCard(
+                          index: index,
+                          delete: (currIndex) {
+                            setState(() {
+                              items.removeAt(currIndex);
+                            });
+                          },
+                        );
+                      })),
+            ],
+          ),
         ),
       ),
     );
