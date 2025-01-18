@@ -1,17 +1,16 @@
 import 'dart:convert';
-
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-
-import '../model/user_model.dart';
+import '../pages/user/data/models/user_model.dart';
 
 class UserService {
   final Dio _dio = Dio();
-  final String endpoint = 'https://jsonplaceholder.typicode.com/users';
+  final String endpoint =
+      'https://usersapi-production-4ffe.up.railway.app/users/';
+  List<User> users = [];
 
   // Get all users with error handling and caching
-  Future<List<UserModel>> getUsers() async {
-    List<UserModel> users = [];
+  Future<List<User>> getUsers() async {
     try {
       // Check cache first
       final prefs = await SharedPreferences.getInstance();
@@ -19,16 +18,16 @@ class UserService {
 
       if (cachedData != null) {
         final decoded = jsonDecode(cachedData) as List;
-        return decoded.map((json) => UserModel.fromJson(json)).toList();
+        return decoded.map((json) => User.fromJson(json)).toList();
       }
-
       // If no cache, fetch from API
       final response = await _dio.get(endpoint);
       if (response.statusCode == 200) {
         // Cache the new data
         await prefs.setString('userData', jsonEncode(response.data));
+
         return (response.data as List)
-            .map((json) => UserModel.fromJson(json))
+            .map((json) => User.fromJson(json))
             .toList();
       }
     } on DioException catch (e) {
@@ -40,12 +39,12 @@ class UserService {
   }
 
   // Create new user
-  Future<UserModel> createUser(UserModel user) async {
+  Future<User> createUser(User user) async {
     try {
       final response = await _dio.post(endpoint, data: user.toJson());
       if (response.statusCode == 201) {
         await _updateCache(user);
-        return UserModel.fromJson(response.data);
+        return User.fromJson(response.data);
       }
       throw Exception('Failed to create user');
     } on DioException catch (e) {
@@ -53,10 +52,20 @@ class UserService {
     }
   }
 
-
+  void deleteUser(String? id, int index) async {
+    try {
+      await Dio()
+          .delete("https://usersapi-production-4ffe.up.railway.app/users/$id");
+      users.remove(
+        users[index],
+      );
+    } on DioException catch (e) {
+      throw _handleError(e);
+    }
+  }
 
   // Update cache after modifications
-  Future<void> _updateCache(UserModel user) async {
+  Future<void> _updateCache(User user) async {
     final prefs = await SharedPreferences.getInstance();
     final cachedData = prefs.getString('userData');
     if (cachedData != null) {
@@ -70,7 +79,6 @@ class UserService {
       await prefs.setString('userData', jsonEncode(users));
     }
   }
-
 
   // Handle Dio errors
   String _handleError(DioException error) {

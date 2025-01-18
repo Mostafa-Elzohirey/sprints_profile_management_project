@@ -6,10 +6,15 @@ import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
 import 'package:sprints_profile_management_project/utils/navigation.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({super.key, required this.index, required this.delete});
+  const UserCard(
+      {super.key,
+      required this.index,
+      required this.delete,
+      required this.user});
 
   final int index;
   final void Function(int index) delete;
+  final User user;
   @override
   Widget build(BuildContext context) {
     Color backGroundColor = cardColorList[(index % cardColorList.length)];
@@ -81,12 +86,12 @@ class UserCard extends StatelessWidget {
             trailing: IconButton(
                 onPressed: () {
                   context.push(UserDetailsView(
-                    userModel: UserModel(
-                        age: '20',
+                    user: User(
+                        age: user.age,
                         email: 'mahmoud',
                         gender: 'Male',
                         name: 'Mahmoud',
-                        phone: '00',
+                        phoneNumber: '00',
                         address: 'ismailai'),
                   ));
                 },

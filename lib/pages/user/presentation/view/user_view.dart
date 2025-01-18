@@ -10,8 +10,8 @@ import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
 import 'package:sprints_profile_management_project/utils/theme/theme_provider.dart';
 
 class UserDetailsView extends StatelessWidget {
-  const UserDetailsView({super.key, required this.userModel});
-  final UserModel userModel;
+  const UserDetailsView({super.key, required this.user});
+  final User user;
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ThemeProvider>(context);
@@ -23,11 +23,11 @@ class UserDetailsView extends StatelessWidget {
             spacing: 12,
             children: [
               CustomUserDetailsAppBar(
-                  textTitle: userModel.name, provider: provider),
+                  textTitle: "${user.name}", provider: provider),
               Expanded(
                 child: CustomUserForm(
                   isReadOnly: true,
-                  userModel: userModel,
+                  userModel: user,
                 ),
               ),
               Center(
@@ -35,7 +35,7 @@ class UserDetailsView extends StatelessWidget {
                   onTap: () {
                     context.pushReplacement(EditCurrentUser(
                       provider: provider,
-                      userModel: userModel,
+                      userModel: user,
                     ));
                   },
                   title: 'Go to Edit',

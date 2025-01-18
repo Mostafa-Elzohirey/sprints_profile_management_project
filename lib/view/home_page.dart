@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../model/user_model.dart';
+import '../pages/user/data/models/user_model.dart';
 import '../services/user_service.dart';
 import 'add_edit_user.dart';
 
@@ -13,7 +13,7 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   final UserService _userService = UserService();
-  List<UserModel> users = [];
+  List<User> users = [];
   bool isLoading = true;
   String? error;
 
@@ -48,7 +48,11 @@ class _HomePageState extends State<HomePage> {
         title: const Text('Users', style: TextStyle(color: Colors.white)),
         actions: [
           IconButton(
-            icon: const Icon(Icons.add, color: Colors.white, size: 30,),
+            icon: const Icon(
+              Icons.add,
+              color: Colors.white,
+              size: 30,
+            ),
             padding: EdgeInsets.only(right: 10),
             onPressed: () async {
               final result = await Navigator.push(
@@ -109,10 +113,13 @@ class _HomePageState extends State<HomePage> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.black,
-              child: Text(user.name[0], style: TextStyle(color: Colors.white),),
+              child: Text(
+                "${user.name?[0]}",
+                style: TextStyle(color: Colors.white),
+              ),
             ),
-            title: Text(user.name),
-            subtitle: Text(user.email),
+            title: Text('${user.name}'),
+            subtitle: Text("${user.email}"),
           ),
         );
       },

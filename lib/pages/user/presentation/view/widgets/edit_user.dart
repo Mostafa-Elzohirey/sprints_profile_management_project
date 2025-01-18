@@ -9,7 +9,7 @@ class EditCurrentUser extends StatefulWidget {
   const EditCurrentUser(
       {super.key, required this.provider, required this.userModel});
   final ThemeProvider provider;
-  final UserModel userModel;
+  final User userModel;
   @override
   State<EditCurrentUser> createState() => _EditCurrentUserState();
 }
@@ -23,12 +23,12 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
   TextEditingController genderController = TextEditingController();
   @override
   void initState() {
-    nameController.text = widget.userModel.name;
-    ageController.text = widget.userModel.age;
-    phoneController.text = widget.userModel.phone ?? "un specified";
+    nameController.text = widget.userModel.name.toString();
+    ageController.text = widget.userModel.age.toString();
+    phoneController.text = widget.userModel.phoneNumber ?? "un specified";
     addressController.text = widget.userModel.address ?? "un specified";
-    emailController.text = widget.userModel.email;
-    genderController.text = widget.userModel.gender;
+    emailController.text = widget.userModel.email.toString();
+    genderController.text = widget.userModel.gender.toString();
     super.initState();
   }
 
@@ -42,7 +42,7 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
           spacing: 12,
           children: [
             CustomUserDetailsAppBar(
-                textTitle: widget.userModel.name, provider: widget.provider),
+                textTitle: widget.userModel.name.toString(), provider: widget.provider),
             Expanded(
               child: CustomUserForm(
                 nameController: nameController,

@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 
-import '../model/user_model.dart';
+
+import '../pages/user/data/models/user_model.dart';
 import '../services/user_service.dart';
 
 class AddEditUser extends StatefulWidget {
-  final UserModel? user;
+  final User? user;
 
   const AddEditUser({super.key, this.user});
 
@@ -27,9 +28,8 @@ class _AddEditUserState extends State<AddEditUser> {
     super.initState();
     _nameController = TextEditingController(text: widget.user?.name ?? '');
     _emailController = TextEditingController(text: widget.user?.email ?? '');
-    _phoneController = TextEditingController(text: widget.user?.phone ?? '');
-    _websiteController =
-        TextEditingController(text: widget.user?.website ?? '');
+    _phoneController =
+        TextEditingController(text: widget.user?.phoneNumber ?? '');
   }
 
   @override
@@ -47,28 +47,12 @@ class _AddEditUserState extends State<AddEditUser> {
     setState(() => _isLoading = true);
 
     try {
-      final updatedUser = UserModel(
-        id: widget.user?.id ?? DateTime.now().millisecondsSinceEpoch,
+      final updatedUser = User(
+        id: widget.user?.id ?? DateTime.now().millisecondsSinceEpoch.toString(),
         name: _nameController.text,
-        username: widget.user?.username ??
-            _nameController.text.toLowerCase().replaceAll(' ', '_'),
         email: _emailController.text,
-        phone: _phoneController.text,
-        website: _websiteController.text,
-        address: widget.user?.address ??
-            Address(
-              street: 'Mahmoud Rashwan',
-              suite: 'Feryal',
-              city: 'Cairo',
-              zipcode: '71511',
-              geo: Geo(lat: '185', lng: '150'),
-            ),
-        company: widget.user?.company ??
-            Company(
-              name: 'Smart Sols',
-              catchPhrase: 'Software Development',
-              bs: 'IT',
-            ),
+        phoneNumber: _phoneController.text,
+        address: widget.user?.address ?? '',
       );
 
       if (widget.user == null) {
@@ -82,8 +66,13 @@ class _AddEditUserState extends State<AddEditUser> {
       }
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(e.toString())));
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              e.toString(),
+            ),
+          ),
+        );
       }
     } finally {
       if (mounted) {
