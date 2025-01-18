@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:sprints_profile_management_project/utils/navigation.dart';
+import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
+import 'package:sprints_profile_management_project/utils/theme/app_font_style.dart';
 
 class DeleteAlert extends StatefulWidget {
   const DeleteAlert({super.key});
@@ -11,47 +14,30 @@ class _DeleteAlertState extends State<DeleteAlert> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
-      icon: Icon(
-        Icons.warning,
-        size: MediaQuery.of(context).size.height*0.1,
-        color: Colors.amber
-      ),
-      title: Text("Are you sure to delete this user?"),
-      backgroundColor: Theme.of(context).colorScheme.primary,
-      actionsAlignment: MainAxisAlignment.center,
-      actions: [
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          }, 
-          style: TextButton.styleFrom(
-            backgroundColor: Theme.of(context).colorScheme.primary,
-            shape: RoundedRectangleBorder()
-          ),
-          child: Text(
-            "Discard",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary
-            )
-          )
+        icon: Icon(Icons.warning, size: 72, color: AppColors.orangeLight),
+        title: Text(
+          "Are you sure to delete this user?",
+          style: AppFontStyle.regular18,
         ),
-        SizedBox(width: 10),
-        TextButton(
-          onPressed: () {
-            Navigator.of(context).pop();
-          }, 
-          style: TextButton.styleFrom(
-            backgroundColor: Colors.red,
-            shape: RoundedRectangleBorder()
-          ),
-          child: Text(
-            "Confirm",
-            style: TextStyle(
-              color: Theme.of(context).colorScheme.inversePrimary
-            )
-          ),
-        )
-      ]
-    );
+        actionsAlignment: MainAxisAlignment.center,
+        actions: [
+          TextButton(
+              onPressed: () {
+                context.pop(false);
+              },
+              child: Text("Discard", style: AppFontStyle.regular18)),
+          SizedBox(width: 10),
+          TextButton(
+            onPressed: () {
+              context.pop(true);
+            },
+            style: TextButton.styleFrom(
+                backgroundColor: AppColors.crimson,
+                shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.all(Radius.circular(4)))),
+            child: Text("Confirm",
+                style: AppFontStyle.regular18.copyWith(color: AppColors.white)),
+          )
+        ]);
   }
 }

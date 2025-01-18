@@ -1,114 +1,102 @@
 import 'package:flutter/material.dart';
-import 'package:sprints_profile_management_project/pages/user_details/user_details.dart';
+import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
+import 'package:sprints_profile_management_project/pages/user/presentation/view/user_view.dart';
 import 'package:sprints_profile_management_project/pages/user_list/components/alert_dialog.dart';
-import 'package:sprints_profile_management_project/theme/app_colors.dart';
+import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
 import 'package:sprints_profile_management_project/utils/navigation.dart';
 
-class UserCard extends StatefulWidget {
-  const UserCard({super.key, required this.index});
+class UserCard extends StatelessWidget {
+  const UserCard({super.key, required this.index, required this.delete});
 
   final int index;
-
-  @override
-  State<UserCard> createState() => _UserCardState();
-}
-
-class _UserCardState extends State<UserCard> {
-  List<int> items = List<int>.generate(100, (int index) => index);
-
+  final void Function(int index) delete;
   @override
   Widget build(BuildContext context) {
+    Color backGroundColor = cardColorList[(index % cardColorList.length)];
     return Dismissible(
-      background: Container(
-        color: Colors.red,
-        alignment: Alignment(-1, 0),
-        padding: EdgeInsets.all(MediaQuery.of(context).size.height*0.01),
-        child: const Icon(Icons.delete),
-      ),
-      onDismissed: (direction) {
-        showDialog(
-          context: context, 
-          builder: (context) => DeleteAlert()
-        );
-      },
-      key: ValueKey<int>(items[widget.index]), 
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: AppColors.itemsColors[widget.index % AppColors.itemsColors.length],
-          borderRadius: BorderRadius.circular(MediaQuery.of(context).size.height*0.01),
+        background: Container(
+          decoration: const BoxDecoration(
+            borderRadius: BorderRadius.only(
+                topLeft: Radius.circular(12), bottomLeft: Radius.circular(12)),
+            color: AppColors.crimson,
+          ),
+          child: Align(
+              alignment: Alignment.centerLeft, child: const Icon(Icons.delete)),
         ),
-        child: ListTile(
-          minTileHeight: MediaQuery.of(context).size.height*0.15,
-          leading: Icon(
-            Icons.person,
-            color: Colors.black,
-            size: MediaQuery.of(context).size.height*0.1,
-          ),
-          title: Column(
-            children: [
-              Text(
-                "Item ${items[widget.index]}",
-                style: TextStyle(
-                  color: Colors.black,
-                  fontWeight: FontWeight.bold
-                ),
-              ),
-              SizedBox(
-                width: MediaQuery.of(context).size.width*0.25,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Colors.white,
-                    borderRadius: BorderRadius.circular(MediaQuery.of(context).size.width*0.5),
-                  ),
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          
-                        },
-                        style: IconButton.styleFrom(
-                          shape: CircleBorder(),
-                          backgroundColor: AppColors.itemsColors[widget.index % AppColors.itemsColors.length]
-                        ),
-                        icon: Icon(
-                          Icons.mail,
-                          color: Colors.black
-                        )
-                      ),
-                      IconButton(
-                        onPressed: () {
-                          
-                        },
-                        style: IconButton.styleFrom(
-                          shape: CircleBorder(),
-                          backgroundColor: AppColors.itemsColors[widget.index % AppColors.itemsColors.length]
-                        ),
-                        icon: Icon(
-                          Icons.phone,
-                          color: Colors.black
-                        )
-                      ),
-                    ],
-                  )
-                )
-              )
-            ],
-          ),
-          trailing: IconButton(
-            onPressed: () {
-              context.push(UserDetails());
-            }, 
-            style: IconButton.styleFrom(
-              backgroundColor: Colors.black,
-              shape: CircleBorder()
+        confirmDismiss: (direction) async {
+          final bool? confirm = await showDialog<bool>(
+            context: context,
+            builder: (context) => const DeleteAlert(),
+          );
+
+          if (confirm == true) {
+            delete(index); // Call the delete callback
+            return true; // Allow dismissal
+          }
+
+          return false;
+        },
+        key: ValueKey<int>(index),
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: backGroundColor,
+            borderRadius: BorderRadius.all(
+              Radius.circular(12),
             ),
-            icon: Icon(
-              Icons.arrow_forward,
-              color: Colors.white,
-            )
           ),
-        ),
-      )
-    );
+          child: ListTile(
+            leading: Icon(
+              Icons.person,
+              color: Colors.black,
+              size: 50,
+            ),
+            subtitle: Container(
+              decoration: BoxDecoration(
+                color: Colors.white,
+                borderRadius: BorderRadius.all(Radius.circular(30)),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  IconButton(
+                      onPressed: () {},
+                      style: IconButton.styleFrom(
+                          shape: CircleBorder(),
+                          backgroundColor: backGroundColor),
+                      icon: Icon(Icons.mail, color: Colors.black)),
+                  IconButton(
+                      onPressed: () {},
+                      style: IconButton.styleFrom(
+                          shape: CircleBorder(),
+                          backgroundColor: backGroundColor),
+                      icon: Icon(Icons.phone, color: Colors.black)),
+                ],
+              ),
+            ),
+            title: Text(
+              "Item $index",
+              style:
+                  TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+            ),
+            trailing: IconButton(
+                onPressed: () {
+                  context.push(UserDetailsView(
+                    userModel: UserModel(
+                        age: '20',
+                        email: 'mahmoud',
+                        gender: 'Male',
+                        name: 'Mahmoud',
+                        phone: '00',
+                        address: 'ismailai'),
+                  ));
+                },
+                style: IconButton.styleFrom(
+                    backgroundColor: Colors.black, shape: CircleBorder()),
+                icon: Icon(
+                  Icons.arrow_forward,
+                  color: Colors.white,
+                )),
+          ),
+        ));
   }
 }
