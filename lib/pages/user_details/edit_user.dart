@@ -1,18 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:email_validator/email_validator.dart';
 
-class CreateUser extends StatefulWidget {
-  const CreateUser({Key? key}) : super(key: key);
+class EditUser extends StatefulWidget {
+  const EditUser({Key? key}) : super(key: key);
 
   @override
-  State<CreateUser> createState() => _CreateUserState();
+  State<EditUser> createState() => _EditUserState();
 }
 
-class _CreateUserState extends State<CreateUser> {
+class _EditUserState extends State<EditUser> {
   final ValueNotifier<ThemeMode> _notifier = ValueNotifier(ThemeMode.light);
+  String user_name = "Name";
   String gender = "Male";
   var list_item = ["Male", "Female"];
-  
   TextEditingController name_controller = TextEditingController();
   TextEditingController age_controller = TextEditingController();
   TextEditingController phone_controller = TextEditingController();
@@ -55,7 +55,7 @@ class _CreateUserState extends State<CreateUser> {
                         Padding(
                           padding: const EdgeInsets.all(8.0),
                           child: Text(
-                            'Create New',
+                            user_name,
                             style: TextStyle(
                                 fontWeight: FontWeight.bold, fontSize: 32),
                           ),
@@ -345,8 +345,7 @@ class _CreateUserState extends State<CreateUser> {
                                         builder: (BuildContext context) {
                                           return AlertDialog(
                                             title: Text('Alert'),
-                                            content: Text(
-                                                'user is created successfuly'),
+                                            content: Text('Edited successfuly'),
                                             actions: <Widget>[
                                               ElevatedButton(
                                                 onPressed: () {
@@ -379,7 +378,7 @@ class _CreateUserState extends State<CreateUser> {
                                     }
                                   },
                                   child: Text(
-                                    "Create New",
+                                    "Edit",
                                     style: TextStyle(
                                         fontSize: 15, color: Colors.white),
                                   ))),

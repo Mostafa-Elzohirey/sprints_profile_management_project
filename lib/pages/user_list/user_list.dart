@@ -33,7 +33,7 @@ class _UserListPageState extends State<UserListPage> {
         actions: [
           IconButton(
             onPressed: () {
-              context.push(CreateNew());
+              context.push(CreateUser());
             },
             style: IconButton.styleFrom(
               shape: CircleBorder(),

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:sprints_profile_management_project/utils/custom_text_field.dart';
 
 class UserForm extends StatefulWidget {
   const UserForm({super.key});
@@ -27,20 +28,21 @@ class _UserFormState extends State<UserForm> {
         child: Column(
           children: [
             SizedBox(height: 10),
-            TextFormField(
-              controller: nameController,
-              style: TextStyle(color: Theme.of(context).colorScheme.primary),
-              decoration: InputDecoration(
-                labelText: "Name",
-                labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
-                border: OutlineInputBorder()
-              )
+            CustomTextFormField(
+              controller: nameController, 
+              label: "Name",
+              validator: (value) {
+                if (value != null && value.trim().isEmpty) {
+                  return 'Name Can\'t be empty';
+                }
+                return null;
+              },
             ),
                 TextFormField(
                   controller: phoneController,
                   validator: (value) {
                     if (value != null && value.trim().isEmpty) {
-                      return 'Email Can\'t be empty ';
+                      return 'Name Can\'t be empty';
                     }
                     return null;
                   },
@@ -55,7 +57,7 @@ class _UserFormState extends State<UserForm> {
                   controller: ageController,
                   validator: (value) {
                     if (value != null && value.trim().isEmpty) {
-                      return 'Email Can\'t be empty ';
+                      return 'Age Can\'t be empty';
                     }
                     return null;
                   },
@@ -72,6 +74,9 @@ class _UserFormState extends State<UserForm> {
               validator: (value) {
                   if (value != null && value.trim().isEmpty) {
                     return 'Email Can\'t be empty ';
+                  }
+                  else if (value != null && value.contains('@')) {
+                    return 'Enter a valid Email';
                   }
                   return null;
               },
@@ -107,7 +112,7 @@ class _UserFormState extends State<UserForm> {
               controller: addressController,
               validator: (value) {
                   if (value != null && value.trim().isEmpty) {
-                    return 'Email Can\'t be empty ';
+                    return 'Address Can\'t be empty ';
                   }
                   return null;
               },
