@@ -17,6 +17,7 @@ class _DeleteAlertState extends State<DeleteAlert> {
         color: Colors.amber
       ),
       title: Text("Are you sure to delete this user?"),
+      backgroundColor: Theme.of(context).colorScheme.primary,
       actionsAlignment: MainAxisAlignment.center,
       actions: [
         TextButton(

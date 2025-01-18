@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:sprints_profile_management_project/pages/user_details/edit.dart';
 import 'package:sprints_profile_management_project/pages/user_list/components/alert_dialog.dart';
 import 'package:sprints_profile_management_project/theme/app_colors.dart';
+import 'package:sprints_profile_management_project/utils/navigation.dart';
 
 class UserCard extends StatefulWidget {
   const UserCard({super.key, required this.index});
@@ -94,7 +96,7 @@ class _UserCardState extends State<UserCard> {
           ),
           trailing: IconButton(
             onPressed: () {
-        
+              context.push(Edit(userID: widget.index));
             }, 
             style: IconButton.styleFrom(
               backgroundColor: Colors.black,

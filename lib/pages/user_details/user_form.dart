@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 
-class UserFrom extends StatefulWidget {
-  const UserFrom({super.key});
+class UserForm extends StatefulWidget {
+  const UserForm({super.key});
 
   @override
-  State<UserFrom> createState() => _UserFromState();
+  State<UserForm> createState() => _UserFormState();
 }
 
-class _UserFromState extends State<UserFrom> {
+class _UserFormState extends State<UserForm> {
   TextEditingController nameController = TextEditingController();
   TextEditingController phoneController = TextEditingController();
   TextEditingController ageController = TextEditingController();
@@ -18,6 +18,7 @@ class _UserFromState extends State<UserFrom> {
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+    String? selectedGender = 'Male';
 
     return SizedBox(
       width: MediaQuery.of(context).size.width,
@@ -35,40 +36,84 @@ class _UserFromState extends State<UserFrom> {
                 border: OutlineInputBorder()
               )
             ),
-            /*Row(
-              children: [
                 TextFormField(
                   controller: phoneController,
                   validator: (value) {
-                  
+                    if (value != null && value.trim().isEmpty) {
+                      return 'Email Can\'t be empty ';
+                    }
+                    return null;
                   },
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   decoration: InputDecoration(
                     labelText: "Phone",
+                    labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                     border: OutlineInputBorder()
                   )
                 ),
                 TextFormField(
                   controller: ageController,
                   validator: (value) {
-                  
+                    if (value != null && value.trim().isEmpty) {
+                      return 'Email Can\'t be empty ';
+                    }
+                    return null;
                   },
                   style: TextStyle(color: Theme.of(context).colorScheme.primary),
                   decoration: InputDecoration(
                     labelText: "Age",
+                    labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                     border: OutlineInputBorder()
                   )
                 ),
-              ],
-            )*/
+              
             TextFormField(
               controller: emailController,
               validator: (value) {
-                  
+                  if (value != null && value.trim().isEmpty) {
+                    return 'Email Can\'t be empty ';
+                  }
+                  return null;
               },
               style: TextStyle(color: Theme.of(context).colorScheme.primary),
               decoration: InputDecoration(
                 labelText: "Email",
+                labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
+                border: OutlineInputBorder()
+              )
+            ),
+
+            DropdownButton<String>(
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              underline: Container(),
+              value: selectedGender,
+              onChanged: (String? newValue) {
+                setState(() {
+                  selectedGender = newValue;
+                });
+              },
+              items: <String>['Male', 'Female']
+                  .map<DropdownMenuItem<String>>((String value) {
+                return DropdownMenuItem<String>(
+                  value: value,
+                  child: Text(
+                    value,
+                  
+                  ),
+                );
+              }).toList(),
+            ),
+            TextFormField(
+              controller: addressController,
+              validator: (value) {
+                  if (value != null && value.trim().isEmpty) {
+                    return 'Email Can\'t be empty ';
+                  }
+                  return null;
+              },
+              style: TextStyle(color: Theme.of(context).colorScheme.primary),
+              decoration: InputDecoration(
+                labelText: "Address",
                 labelStyle: TextStyle(color: Theme.of(context).colorScheme.primary),
                 border: OutlineInputBorder()
               )

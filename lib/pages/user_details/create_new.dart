@@ -61,7 +61,7 @@ class _CreateNewState extends State<CreateNew> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            UserFrom(),
+            UserForm(),
             ElevatedButton(
               onPressed: () {
                 // create New API
