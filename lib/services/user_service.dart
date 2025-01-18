@@ -7,7 +7,8 @@ import '../model/user_model.dart';
 
 class UserService {
   final Dio _dio = Dio();
-  final String endpoint = 'https://jsonplaceholder.typicode.com/users';
+  final String endpoint =
+      'https://usersapi-production-4ffe.up.railway.app/users/';
 
   // Get all users with error handling and caching
   Future<List<UserModel>> getUsers() async {
@@ -18,8 +19,8 @@ class UserService {
       final cachedData = prefs.getString('userData');
 
       if (cachedData != null) {
-        final decoded = jsonDecode(cachedData) as List;
-        return decoded.map((json) => UserModel.fromJson(json)).toList();
+        final decoded = jsonDecode(cachedData);
+        return _mapData(decoded);
       }
 
       // If no cache, fetch from API
@@ -27,9 +28,7 @@ class UserService {
       if (response.statusCode == 200) {
         // Cache the new data
         await prefs.setString('userData', jsonEncode(response.data));
-        return (response.data as List)
-            .map((json) => UserModel.fromJson(json))
-            .toList();
+        return _mapData(response.data);
       }
     } on DioException catch (e) {
       throw _handleError(e);
@@ -42,7 +41,7 @@ class UserService {
   // Create new user
   Future<UserModel> createUser(UserModel user) async {
     try {
-      final response = await _dio.post(endpoint, data: user.toJson());
+      final response = await _dio.post(endpoint, data: user.toMap());
       if (response.statusCode == 201) {
         await _updateCache(user);
         return UserModel.fromJson(response.data);
@@ -53,7 +52,48 @@ class UserService {
     }
   }
 
+  Future<void> updateUser(String id, UserModel updatedUser) async {
+    try {
+      // Send a PUT request to update the user
+      final response = await _dio.put(
+        'https://usersapi-production-4ffe.up.railway.app/users/$id',
+        data: updatedUser.toMap(),
+      );
+      // Check if the request was successful
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print('User updated successfully: ${response.data}');
+      } else {
+        print('Failed to update user. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('An error occurred: $e');
+    }
+  }
 
+  Future<void> deleteUser(String id) async {
+    try {
+      // Send a DELETE request to delete the user
+      final response = await _dio.delete(
+        'https://usersapi-production-4ffe.up.railway.app/users/$id',
+        options: Options(
+          headers: {
+            'accept': 'application/json',
+          },
+        ),
+      );
+
+      // Check if the request was successful
+      if (response.statusCode == 200 || response.statusCode == 204) {
+        print('User deleted successfully');
+      } else {
+        print('Failed to delete user. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('An error occurred: $e');
+    }
+  }
 
   // Update cache after modifications
   Future<void> _updateCache(UserModel user) async {
@@ -71,7 +111,6 @@ class UserService {
     }
   }
 
-
   // Handle Dio errors
   String _handleError(DioException error) {
     switch (error.type) {
@@ -84,5 +123,11 @@ class UserService {
       default:
         return 'Network error occurred';
     }
+  }
+
+  List<UserModel> _mapData(List<dynamic> jsonData) {
+    final List<UserModel> users =
+        jsonData.map<UserModel>((data) => UserModel.fromMap(data)).toList();
+    return users;
   }
 }

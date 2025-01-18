@@ -109,10 +109,10 @@ class _HomePageState extends State<HomePage> {
           child: ListTile(
             leading: CircleAvatar(
               backgroundColor: Colors.black,
-              child: Text(user.name[0], style: TextStyle(color: Colors.white),),
+              child: Text(user.name?? "", style: TextStyle(color: Colors.white),),
             ),
-            title: Text(user.name),
-            subtitle: Text(user.email),
+            title: Text(user.name?? ""),
+            subtitle: Text(user.email?? "No Mail"),
           ),
         );
       },

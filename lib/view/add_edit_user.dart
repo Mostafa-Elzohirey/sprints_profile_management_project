@@ -27,9 +27,9 @@ class _AddEditUserState extends State<AddEditUser> {
     super.initState();
     _nameController = TextEditingController(text: widget.user?.name ?? '');
     _emailController = TextEditingController(text: widget.user?.email ?? '');
-    _phoneController = TextEditingController(text: widget.user?.phone ?? '');
+    _phoneController = TextEditingController(text: widget.user?.phoneNumber ?? '');
     _websiteController =
-        TextEditingController(text: widget.user?.website ?? '');
+        TextEditingController(text: widget.user?.gender ?? '');
   }
 
   @override
@@ -48,27 +48,10 @@ class _AddEditUserState extends State<AddEditUser> {
 
     try {
       final updatedUser = UserModel(
-        id: widget.user?.id ?? DateTime.now().millisecondsSinceEpoch,
         name: _nameController.text,
-        username: widget.user?.username ??
-            _nameController.text.toLowerCase().replaceAll(' ', '_'),
         email: _emailController.text,
-        phone: _phoneController.text,
-        website: _websiteController.text,
-        address: widget.user?.address ??
-            Address(
-              street: 'Mahmoud Rashwan',
-              suite: 'Feryal',
-              city: 'Cairo',
-              zipcode: '71511',
-              geo: Geo(lat: '185', lng: '150'),
-            ),
-        company: widget.user?.company ??
-            Company(
-              name: 'Smart Sols',
-              catchPhrase: 'Software Development',
-              bs: 'IT',
-            ),
+        phoneNumber: _phoneController.text,
+        gender: _websiteController.text
       );
 
       if (widget.user == null) {
