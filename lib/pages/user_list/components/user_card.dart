@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sprints_profile_management_project/model/user_model.dart';
+import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/user_view.dart';
 import 'package:sprints_profile_management_project/pages/user_list/components/alert_dialog.dart';
 import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
@@ -35,8 +35,8 @@ class UserCard extends StatelessWidget {
           );
 
           if (confirm == true) {
-            delete(index); // Call the delete callback
-            return true; // Allow dismissal
+            delete(index);
+            return true;
           }
 
           return false;
@@ -59,7 +59,7 @@ class UserCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  "Item $index",
+                  user.name ?? "",
                   style: TextStyle(
                       color: Colors.black, fontWeight: FontWeight.bold),
                 ),
@@ -73,13 +73,13 @@ class UserCard extends StatelessWidget {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
-                          onPressed: () {},
+                          onPressed: null,
                           style: IconButton.styleFrom(
                               shape: CircleBorder(),
                               backgroundColor: backGroundColor),
                           icon: Icon(Icons.mail, color: Colors.black)),
                       IconButton(
-                          onPressed: () {},
+                          onPressed: null,
                           style: IconButton.styleFrom(
                               shape: CircleBorder(),
                               backgroundColor: backGroundColor),
@@ -92,13 +92,7 @@ class UserCard extends StatelessWidget {
             trailing: IconButton(
                 onPressed: () {
                   context.push(UserDetailsView(
-                    user: User(
-                        age: user.age,
-                        email: 'mahmoud',
-                        gender: 'Male',
-                        name: 'Mahmoud',
-                        phoneNumber: '00',
-                        address: 'ismailai'),
+                    user:user,
                   ));
                 },
                 style: IconButton.styleFrom(

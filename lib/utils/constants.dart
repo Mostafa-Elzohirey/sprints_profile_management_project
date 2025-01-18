@@ -1,1 +1,1 @@
-const List<String>genderTypes=['Male','Female'];
+enum ApiStage { loading, success, error }

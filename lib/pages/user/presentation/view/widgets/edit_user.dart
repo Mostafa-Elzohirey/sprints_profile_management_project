@@ -3,6 +3,9 @@ import 'package:sprints_profile_management_project/pages/user/data/models/user_m
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_app_bar.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_push_button.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_user_form.dart';
+import 'package:sprints_profile_management_project/services/user_service.dart';
+import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
+import 'package:sprints_profile_management_project/utils/theme/app_font_style.dart';
 import 'package:sprints_profile_management_project/utils/theme/theme_provider.dart';
 
 class EditCurrentUser extends StatefulWidget {
@@ -31,7 +34,44 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
     genderController.text = widget.userModel.gender!;
     emailController.text = widget.userModel.email.toString();
     genderController.text = widget.userModel.gender.toString();
+    setState(() {
+      
+    });
     super.initState();
+  }
+
+  bool isLoading = false;
+  final UserService userService = UserService();
+  Future<void> editUser() async {
+    isLoading = true;
+    final result = await userService.createUser(User(
+      id: widget.userModel.id,
+      email: emailController.text,
+      phoneNumber: phoneController.text,
+      gender: genderController.text,
+      address: addressController.text,
+      name: nameController.text,
+      age: ageController.text,
+    ));
+    result.fold((user) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          "Success Add User",
+          style: AppFontStyle.bold16.copyWith(color: AppColors.white),
+        ),
+        backgroundColor: Colors.green,
+      ));
+    }, (error) {
+      ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+        content: Text(
+          error,
+          style: AppFontStyle.bold16.copyWith(color: AppColors.white),
+        ),
+        backgroundColor: Colors.redAccent,
+      ));
+    });
+    isLoading = false;
+    setState(() {});
   }
 
   @override
@@ -45,7 +85,6 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
           children: [
             CustomUserDetailsAppBar(
                 textTitle: widget.userModel.name!, provider: widget.provider),
-                textTitle: widget.userModel.name.toString(), provider: widget.provider),
             Expanded(
               child: CustomUserForm(
                 nameController: nameController,
@@ -56,7 +95,12 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
                 genderController: genderController,
               ),
             ),
-            CustomPushButton(title: 'Edit', onTap: () {}),
+            CustomPushButton(
+                isLoading: isLoading,
+                title: 'Edit',
+                onTap: () async {
+                  await editUser();
+                }),
             SizedBox(),
           ],
         ),

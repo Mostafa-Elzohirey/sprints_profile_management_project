@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sprints_profile_management_project/model/user_model.dart';
+import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
 import 'package:sprints_profile_management_project/utils/theme/app_font_style.dart';
 import 'package:sprints_profile_management_project/utils/widgets/custom_text_form_feild.dart';
 
@@ -13,7 +13,8 @@ class CustomUserForm extends StatelessWidget {
       this.phoneController,
       this.genderController,
       this.addressController,
-      this.userModel});
+      this.userModel,
+      this.changeGender});
   final bool isReadOnly;
   final TextEditingController? emailController;
   final TextEditingController? nameController;
@@ -22,6 +23,7 @@ class CustomUserForm extends StatelessWidget {
   final TextEditingController? genderController;
   final TextEditingController? addressController;
   final User? userModel;
+  final void Function(String)? changeGender;
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -31,7 +33,7 @@ class CustomUserForm extends StatelessWidget {
           label: 'Name',
           enableFill: false,
           initalText: userModel?.name,
-          controller: emailController,
+          controller: nameController,
           isReadOnly: isReadOnly,
         ),
         Row(
@@ -42,6 +44,7 @@ class CustomUserForm extends StatelessWidget {
               child: CustomTextFormField(
                 label: 'Phone Number',
                 enableFill: false,
+                textInputType: TextInputType.phone,
                 controller: phoneController,
                 initalText: userModel?.phoneNumber,
                 isReadOnly: isReadOnly,
@@ -51,6 +54,7 @@ class CustomUserForm extends StatelessWidget {
               child: CustomTextFormField(
                   label: 'Age',
                   enableFill: false,
+                  textInputType: TextInputType.number,
                   controller: ageController,
                   isReadOnly: isReadOnly,
                   initalText: userModel?.age.toString()),
@@ -69,7 +73,7 @@ class CustomUserForm extends StatelessWidget {
           children: [
             Expanded(
               child: CustomTextFormField(
-                  label: 'Age',
+                  label: 'Gender',
                   suffixWidget: isReadOnly
                       ? null
                       : PopupMenuButton(
@@ -77,13 +81,21 @@ class CustomUserForm extends StatelessWidget {
                           itemBuilder: (context) {
                             return [
                               PopupMenuItem(
-                                  onTap: () {},
+                                  onTap: () {
+                                    changeGender != null
+                                        ? changeGender!('Male')
+                                        : null;
+                                  },
                                   child: Text(
                                     "Male",
                                     style: AppFontStyle.bold16,
                                   )),
                               PopupMenuItem(
-                                  onTap: () {},
+                                  onTap: () {
+                                    changeGender != null
+                                        ? changeGender!('Female')
+                                        : null;
+                                  },
                                   child: Text(
                                     "Female",
                                     style: AppFontStyle.bold16,
@@ -92,7 +104,7 @@ class CustomUserForm extends StatelessWidget {
                           },
                         ),
                   enableFill: false,
-                  controller: ageController,
+                  controller: genderController,
                   isReadOnly: isReadOnly,
                   initalText: userModel?.gender),
             ),

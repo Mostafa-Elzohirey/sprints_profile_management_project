@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../pages/user/data/models/user_model.dart';
@@ -10,7 +11,7 @@ class UserService {
   List<User> users = [];
 
   // Get all users with error handling and caching
-  Future<List<User>> getUsers() async {
+  Future<Either<List<User>, String>> getUsers() async {
     try {
       // Check cache first
       final prefs = await SharedPreferences.getInstance();
@@ -18,7 +19,7 @@ class UserService {
 
       if (cachedData != null) {
         final decoded = jsonDecode(cachedData) as List;
-        return decoded.map((json) => User.fromJson(json)).toList();
+        return left(decoded.map((json) => User.fromJson(json)).toList());
       }
       // If no cache, fetch from API
       final response = await _dio.get(endpoint);
@@ -26,41 +27,43 @@ class UserService {
         // Cache the new data
         await prefs.setString('userData', jsonEncode(response.data));
 
-        return (response.data as List)
+        return left((response.data as List)
             .map((json) => User.fromJson(json))
-            .toList();
+            .toList());
       }
+      return left(users);
     } on DioException catch (e) {
-      throw _handleError(e);
+      return right(_handleError(e));
     } catch (e) {
-      throw Exception('Failed to load users: ${e.toString()}');
+      return right('Failed to load users: ${e.toString()}');
     }
-    return users;
   }
 
   // Create new user
-  Future<User> createUser(User user) async {
+  Future<Either<User, String>> createUser(User user) async {
     try {
       final response = await _dio.post(endpoint, data: user.toJson());
+
       if (response.statusCode == 201) {
         await _updateCache(user);
-        return User.fromJson(response.data);
+        return left(User.fromJson(response.data));
       }
-      throw Exception('Failed to create user');
+      return right('error may be in parsing');
     } on DioException catch (e) {
-      throw _handleError(e);
+      return right(_handleError(e));
     }
   }
 
-  void deleteUser(String? id, int index) async {
+  Future<Either<bool, String>> deleteUser(String? id, int index) async {
     try {
-      await Dio()
+      final response = await _dio
           .delete("https://usersapi-production-4ffe.up.railway.app/users/$id");
-      users.remove(
-        users[index],
-      );
+      if (response.statusCode == 200 || response.statusCode == 201) {
+        return left(true);
+      }
+      return left(false);
     } on DioException catch (e) {
-      throw _handleError(e);
+      return right(_handleError(e));
     }
   }
 

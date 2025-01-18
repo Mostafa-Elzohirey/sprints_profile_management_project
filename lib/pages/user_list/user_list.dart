@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
 import 'package:sprints_profile_management_project/pages/user_list/components/custom_app_bar.dart';
 import 'package:sprints_profile_management_project/pages/user_list/components/user_card.dart';
+import 'package:sprints_profile_management_project/utils/constants.dart';
+import 'package:sprints_profile_management_project/utils/theme/app_font_style.dart';
 import 'package:sprints_profile_management_project/utils/theme/theme_provider.dart';
 import 'package:sprints_profile_management_project/services/user_service.dart';
 
@@ -14,10 +17,19 @@ class UserListPage extends StatefulWidget {
 
 class _UserListPageState extends State<UserListPage> {
   UserService services = UserService();
-  bool isLoading = true;
+  ApiStage apiStages = ApiStage.loading;
+  String? errMessage;
+  List<User> usersList = [];
   Future<void> getUsers() async {
-    services.users = await services.getUsers();
-    isLoading = false;
+    apiStages = ApiStage.loading;
+    final result = await services.getUsers();
+    result.fold((list) {
+      apiStages = ApiStage.success;
+      usersList.addAll(list);
+    }, (error) {
+      apiStages = ApiStage.error;
+      errMessage = error;
+    });
     setState(() {});
   }
 
@@ -32,76 +44,47 @@ class _UserListPageState extends State<UserListPage> {
     final provider = Provider.of<ThemeProvider>(context, listen: false);
     return SafeArea(
         child: Scaffold(
-            body: FutureBuilder<List<UserModel>>(
-      future: _users,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return const Center(child: CircularProgressIndicator());
-        } else if (snapshot.hasError) {
-          return Center(child: Text('Error: ${snapshot.error}'));
-        } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
-          return const Center(child: Text('No users found.'));
-        } else {
-          List<UserModel> items = snapshot.data!;
-          return Column(
-            children: [
-              UserListAppBar(provider: provider),
-              Expanded(
-                  child: ListView.separated(
-                      key: ValueKey(items.length),
-                      separatorBuilder: (context, index) {
-                        return SizedBox(
-                          height: 16,
-                        );
-                      },
-                      itemCount: items.length,
-                      padding: const EdgeInsets.symmetric(
-                          vertical: 16, horizontal: 12),
-                      itemBuilder: (BuildContext context, int index) {
-                        return UserCard(
-                          user: items[index],
-                          index: index,
-                          delete: (currIndex) {
-                            setState(() {
-                              items.removeAt(currIndex);
-                            });
-                          },
-                        );
-                      })),
-            ],
-          );
-        }
-      },
-    )));
-      child: Scaffold(
-        body: Column(
-          children: [
-            UserListAppBar(provider: provider),
-            Expanded(
+      body: Column(
+        children: [
+          UserListAppBar(provider: provider),
+          switch (apiStages) {
+            ApiStage.loading => CircularProgressIndicator(),
+            ApiStage.success => Expanded(
                 child: ListView.separated(
-                    key: ValueKey(1),
+                    key: ValueKey(usersList.length),
                     separatorBuilder: (context, index) {
                       return SizedBox(
                         height: 16,
                       );
                     },
-                    itemCount: services.users.length,
+                    itemCount: usersList.length,
                     padding: const EdgeInsets.symmetric(
                         vertical: 16, horizontal: 12),
                     itemBuilder: (BuildContext context, int index) {
                       return UserCard(
+                        user: usersList[index],
                         index: index,
-                        user: services.users[index],
-                        delete: (currIndex) {
-                          setState(() {
-                            services.users.removeAt(currIndex);
+                        delete: (currIndex) async {
+                          final result = await services.deleteUser(
+                              usersList[index].id, index);
+                          result.fold((check) {
+                           check ?usersList.removeAt(currIndex):null;
+                          }, (error) {
+                            ScaffoldMessenger.of(context)
+                                .showSnackBar(SnackBar(content: Text(error)));
                           });
+
+                          setState(() {});
                         },
                       );
                     })),
-          ],
-        ),
+            ApiStage.error => Text(
+                "$errMessage",
+                style: AppFontStyle.bold18,
+              ),
+          }
+        ],
       ),
-    );
+    ));
   }
 }

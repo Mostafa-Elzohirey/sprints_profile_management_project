@@ -4,10 +4,15 @@ import 'package:sprints_profile_management_project/utils/theme/app_font_style.da
 
 class CustomPushButton extends StatelessWidget {
   const CustomPushButton(
-      {super.key, required this.title, this.besideTitle, required this.onTap});
+      {super.key,
+      required this.title,
+      this.besideTitle,
+      required this.onTap,
+      this.isLoading = false});
   final String title;
   final Widget? besideTitle;
   final void Function() onTap;
+  final bool isLoading;
   @override
   Widget build(BuildContext context) {
     return InkWell(
@@ -17,17 +22,19 @@ class CustomPushButton extends StatelessWidget {
         decoration: const BoxDecoration(
             color: AppColors.greyDark,
             borderRadius: BorderRadius.all(Radius.circular(10))),
-        child: Row(
-          spacing: 5,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Text(
-              title,
-              style: AppFontStyle.bold16.copyWith(color: AppColors.white),
-            ),
-            besideTitle ?? SizedBox(),
-          ],
-        ),
+        child: isLoading
+            ? CircularProgressIndicator()
+            : Row(
+                spacing: 5,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    title,
+                    style: AppFontStyle.bold16.copyWith(color: AppColors.white),
+                  ),
+                  besideTitle ?? SizedBox(),
+                ],
+              ),
       ),
     );
   }

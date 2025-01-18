@@ -12,7 +12,7 @@ class User {
     String? id,
     String? name,
     String? email,
-    num? age,
+    String? age,
     String? gender,
     String? phoneNumber,
     String? address,
@@ -30,7 +30,7 @@ class User {
     _id = json['id'];
     _name = json['name'];
     _email = json['email'];
-    _age = json['age'];
+    _age = json['age'].toString();
     _gender = json['gender'];
     _phoneNumber = json['phone_number'];
     _address = json['address'];
@@ -38,7 +38,7 @@ class User {
   String? _id;
   String? _name;
   String? _email;
-  num? _age;
+  String? _age;
   String? _gender;
   String? _phoneNumber;
   String? _address;
@@ -46,7 +46,7 @@ class User {
   String? get id => _id;
   String? get name => _name;
   String? get email => _email;
-  num? get age => _age;
+  String? get age => _age;
   String? get gender => _gender;
   String? get phoneNumber => _phoneNumber;
   String? get address => _address;
