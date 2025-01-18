@@ -27,6 +27,8 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
     ageController.text = widget.userModel.age.toString();
     phoneController.text = widget.userModel.phoneNumber ?? "un specified";
     addressController.text = widget.userModel.address ?? "un specified";
+    emailController.text = widget.userModel.email ?? "un specified";
+    genderController.text = widget.userModel.gender!;
     emailController.text = widget.userModel.email.toString();
     genderController.text = widget.userModel.gender.toString();
     super.initState();
@@ -42,6 +44,7 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
           spacing: 12,
           children: [
             CustomUserDetailsAppBar(
+                textTitle: widget.userModel.name!, provider: widget.provider),
                 textTitle: widget.userModel.name.toString(), provider: widget.provider),
             Expanded(
               child: CustomUserForm(

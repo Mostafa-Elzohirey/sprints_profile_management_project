@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
+import 'package:sprints_profile_management_project/model/user_model.dart';
 import 'package:sprints_profile_management_project/utils/theme/app_font_style.dart';
 import 'package:sprints_profile_management_project/utils/widgets/custom_text_form_feild.dart';
 
