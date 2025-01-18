@@ -59,6 +59,7 @@ class _UserListPageState extends State<UserListPage> {
                           vertical: 16, horizontal: 12),
                       itemBuilder: (BuildContext context, int index) {
                         return UserCard(
+                          user: items[index],
                           index: index,
                           delete: (currIndex) {
                             setState(() {

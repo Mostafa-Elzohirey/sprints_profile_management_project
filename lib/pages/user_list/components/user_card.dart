@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
+import 'package:sprints_profile_management_project/model/user_model.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/user_view.dart';
 import 'package:sprints_profile_management_project/pages/user_list/components/alert_dialog.dart';
 import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
 import 'package:sprints_profile_management_project/utils/navigation.dart';
 
 class UserCard extends StatelessWidget {
-  const UserCard({super.key, required this.index, required this.delete});
-
+  const UserCard({super.key, required this.index, required this.delete, required this.user});
+  final UserModel user;
   final int index;
   final void Function(int index) delete;
   @override
@@ -74,20 +74,14 @@ class UserCard extends StatelessWidget {
               ),
             ),
             title: Text(
-              "Item $index",
+              user.name!,
               style:
                   TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
             ),
             trailing: IconButton(
                 onPressed: () {
                   context.push(UserDetailsView(
-                    userModel: UserModel(
-                        age: '20',
-                        email: 'mahmoud',
-                        gender: 'Male',
-                        name: 'Mahmoud',
-                        phone: '00',
-                        address: 'ismailai'),
+                    userModel: user,
                   ));
                 },
                 style: IconButton.styleFrom(

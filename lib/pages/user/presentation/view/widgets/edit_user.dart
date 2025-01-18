@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
+import 'package:sprints_profile_management_project/model/user_model.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_app_bar.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_push_button.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_user_form.dart';
@@ -23,12 +23,12 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
   TextEditingController genderController = TextEditingController();
   @override
   void initState() {
-    nameController.text = widget.userModel.name;
-    ageController.text = widget.userModel.age;
-    phoneController.text = widget.userModel.phone ?? "un specified";
+    nameController.text = widget.userModel.name!;
+    ageController.text = widget.userModel.age!.toString();
+    phoneController.text = widget.userModel.phoneNumber ?? "un specified";
     addressController.text = widget.userModel.address ?? "un specified";
-    emailController.text = widget.userModel.email;
-    genderController.text = widget.userModel.gender;
+    emailController.text = widget.userModel.email ?? "un specified";
+    genderController.text = widget.userModel.gender!;
     super.initState();
   }
 
@@ -42,7 +42,7 @@ class _EditCurrentUserState extends State<EditCurrentUser> {
           spacing: 12,
           children: [
             CustomUserDetailsAppBar(
-                textTitle: widget.userModel.name, provider: widget.provider),
+                textTitle: widget.userModel.name!, provider: widget.provider),
             Expanded(
               child: CustomUserForm(
                 nameController: nameController,

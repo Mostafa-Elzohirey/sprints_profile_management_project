@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:sprints_profile_management_project/pages/user/data/models/user_model.dart';
+import 'package:sprints_profile_management_project/model/user_model.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_app_bar.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_push_button.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_user_form.dart';
@@ -23,7 +23,7 @@ class UserDetailsView extends StatelessWidget {
             spacing: 12,
             children: [
               CustomUserDetailsAppBar(
-                  textTitle: userModel.name, provider: provider),
+                  textTitle: userModel.name??'User', provider: provider),
               Expanded(
                 child: CustomUserForm(
                   isReadOnly: true,
@@ -35,7 +35,7 @@ class UserDetailsView extends StatelessWidget {
                   onTap: () {
                     context.pushReplacement(EditCurrentUser(
                       provider: provider,
-                      userModel: userModel,
+                      userModel: userModel!,
                     ));
                   },
                   title: 'Go to Edit',
