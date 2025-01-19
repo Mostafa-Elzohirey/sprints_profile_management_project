@@ -10,11 +10,14 @@ class UserCard extends StatelessWidget {
       {super.key,
       required this.index,
       required this.delete,
-      required this.user});
+      required this.user,
+      required this.refreshList});
 
   final int index;
   final void Function(int index) delete;
   final User user;
+  final Future<void> Function() refreshList;
+
   @override
   Widget build(BuildContext context) {
     Color backGroundColor = cardColorList[(index % cardColorList.length)];
@@ -92,7 +95,10 @@ class UserCard extends StatelessWidget {
             trailing: IconButton(
                 onPressed: () {
                   context.push(UserDetailsView(
-                    user:user,
+                    user: user,
+                    refreshList: () async {
+                      await refreshList();
+                    },
                   ));
                 },
                 style: IconButton.styleFrom(

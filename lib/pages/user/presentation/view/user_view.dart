@@ -5,13 +5,14 @@ import 'package:sprints_profile_management_project/pages/user/presentation/view/
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_push_button.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_user_form.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/edit_user.dart';
-import 'package:sprints_profile_management_project/utils/navigation.dart';
 import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
 import 'package:sprints_profile_management_project/utils/theme/theme_provider.dart';
 
 class UserDetailsView extends StatelessWidget {
-  const UserDetailsView({super.key, required this.user});
+  const UserDetailsView(
+      {super.key, required this.user, required this.refreshList});
   final User user;
+  final Future<void> Function() refreshList;
   @override
   Widget build(BuildContext context) {
     final provider = Provider.of<ThemeProvider>(context);
@@ -32,11 +33,17 @@ class UserDetailsView extends StatelessWidget {
               ),
               Center(
                 child: CustomPushButton(
-                  onTap: () {
-                    context.pushReplacement(EditCurrentUser(
-                      provider: provider,
-                      userModel: user,
-                    ));
+                  onTap: () async {
+                    var result = await Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => EditCurrentUser(
+                                  provider: provider,
+                                  userModel: user,
+                                )));
+                    if (result != null) {
+                      await refreshList();
+                    }
                   },
                   title: 'Go to Edit',
                   besideTitle: Icon(

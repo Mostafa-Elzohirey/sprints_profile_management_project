@@ -105,7 +105,7 @@ class CustomUserForm extends StatelessWidget {
                         ),
                   enableFill: false,
                   controller: genderController,
-                  isReadOnly: isReadOnly,
+                  isReadOnly: true,
                   initalText: userModel?.gender),
             ),
             Expanded(

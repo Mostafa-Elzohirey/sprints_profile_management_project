@@ -21,7 +21,10 @@ class _UserListPageState extends State<UserListPage> {
   String? errMessage;
   List<User> usersList = [];
   Future<void> getUsers() async {
+    usersList.clear();
+
     apiStages = ApiStage.loading;
+    setState(() {});
     final result = await services.getUsers();
     result.fold((list) {
       apiStages = ApiStage.success;
@@ -46,10 +49,19 @@ class _UserListPageState extends State<UserListPage> {
         child: Scaffold(
       body: Column(
         children: [
-          UserListAppBar(provider: provider),
+          UserListAppBar(
+            provider: provider,
+            refreshList: () async {
+              await getUsers();
+            },
+          ),
           switch (apiStages) {
             ApiStage.loading => CircularProgressIndicator(),
             ApiStage.success => Expanded(
+                  child: RefreshIndicator(
+                onRefresh: () async {
+                  await getUsers();
+                },
                 child: ListView.separated(
                     key: ValueKey(usersList.length),
                     separatorBuilder: (context, index) {
@@ -62,13 +74,19 @@ class _UserListPageState extends State<UserListPage> {
                         vertical: 16, horizontal: 12),
                     itemBuilder: (BuildContext context, int index) {
                       return UserCard(
+                        refreshList: () async {
+                          await getUsers();
+                        },
                         user: usersList[index],
                         index: index,
                         delete: (currIndex) async {
                           final result = await services.deleteUser(
-                              usersList[index].id, index);
+                            usersList[index].id ?? "",
+                          );
                           result.fold((check) {
-                           check ?usersList.removeAt(currIndex):null;
+                            ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                                content: Text("Deleted Successfully...")));
+                            check ? usersList.removeAt(currIndex) : null;
                           }, (error) {
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(SnackBar(content: Text(error)));
@@ -77,7 +95,8 @@ class _UserListPageState extends State<UserListPage> {
                           setState(() {});
                         },
                       );
-                    })),
+                    }),
+              )),
             ApiStage.error => Text(
                 "$errMessage",
                 style: AppFontStyle.bold18,

@@ -44,8 +44,9 @@ class UserService {
     try {
       final response = await _dio.post(endpoint, data: user.toJson());
 
-      if (response.statusCode == 201) {
+      if (response.statusCode == 200) {
         await _updateCache(user);
+
         return left(User.fromJson(response.data));
       }
       return right('error may be in parsing');
@@ -54,11 +55,28 @@ class UserService {
     }
   }
 
-  Future<Either<bool, String>> deleteUser(String? id, int index) async {
+  Future<Either<User, String>> updateUser(User user) async {
     try {
-      final response = await _dio
-          .delete("https://usersapi-production-4ffe.up.railway.app/users/$id");
+      final response = await _dio.put('$endpoint${user.id}', data: user.toJson());
+
+      if (response.statusCode == 200) {
+        await _updateCache(user);
+
+        return left(User.fromJson(response.data));
+      }
+      return right('error may be in parsing');
+    } on DioException catch (e) {
+      return right(_handleError(e));
+    }
+  }
+
+  Future<Either<bool, String>> deleteUser(
+    String id,
+  ) async {
+    try {
+      final response = await _dio.delete("$endpoint$id");
       if (response.statusCode == 200 || response.statusCode == 201) {
+        _deleteFromCache(id);
         return left(true);
       }
       return left(false);
@@ -79,6 +97,16 @@ class UserService {
       } else {
         users.add(user.toJson());
       }
+      await prefs.setString('userData', jsonEncode(users));
+    }
+  }
+
+  Future<void> _deleteFromCache(String userId) async {
+    final prefs = await SharedPreferences.getInstance();
+    final cachedData = prefs.getString('userData');
+    if (cachedData != null) {
+      List<dynamic> users = jsonDecode(cachedData);
+      users.removeWhere((item) => item['id'] == userId);
       await prefs.setString('userData', jsonEncode(users));
     }
   }

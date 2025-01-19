@@ -56,8 +56,8 @@ class User {
     map['id'] = _id;
     map['name'] = _name;
     map['email'] = _email;
-    map['age'] = _age;
-    map['gender'] = _gender;
+    map['age'] = int.tryParse(_age ?? "0") ?? 0;
+    map['gender'] = _gender?.toLowerCase();
     map['phone_number'] = _phoneNumber;
     map['address'] = _address;
     return map;

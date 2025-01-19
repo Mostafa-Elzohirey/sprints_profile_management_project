@@ -42,10 +42,12 @@ extension NavigationExtensions on BuildContext {
     Navigator.pop(this, result);
   }
 
-  void push(Widget page,
-      {Curve curve = Curves.easeInOut,
-      Duration transationDuration = const Duration(milliseconds: 300),
-      Duration reverseTransationDuration = const Duration(milliseconds: 300)}) {
+  void push<T extends Object?>(
+    Widget page, {
+    Curve curve = Curves.easeInOut,
+    Duration transationDuration = const Duration(milliseconds: 300),
+    Duration reverseTransationDuration = const Duration(milliseconds: 300),
+  }) {
     Navigator.push(
       this,
       _animatedRoute(page,

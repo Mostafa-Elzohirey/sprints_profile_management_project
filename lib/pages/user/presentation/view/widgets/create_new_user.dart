@@ -4,6 +4,7 @@ import 'package:sprints_profile_management_project/pages/user/presentation/view/
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_push_button.dart';
 import 'package:sprints_profile_management_project/pages/user/presentation/view/widgets/custom_user_form.dart';
 import 'package:sprints_profile_management_project/services/user_service.dart';
+import 'package:sprints_profile_management_project/utils/navigation.dart';
 import 'package:sprints_profile_management_project/utils/theme/app_colors.dart';
 import 'package:sprints_profile_management_project/utils/theme/app_font_style.dart';
 import 'package:sprints_profile_management_project/utils/theme/theme_provider.dart';
@@ -44,6 +45,7 @@ class _CreateNewUserState extends State<CreateNewUser> {
         ),
         backgroundColor: Colors.green,
       ));
+      context.pop(user);
     }, (error) {
       ScaffoldMessenger.of(context).showSnackBar(SnackBar(
         content: Text(
