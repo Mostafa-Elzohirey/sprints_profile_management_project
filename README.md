@@ -1,16 +1,46 @@
 # sprints_profile_management_project
 
-A new Flutter project.
+Develop a User Profile Management with advanced features to manage user data.
+The app will have multiple functionalities like creating, fetching, updating, and deleting user profiles.
+The project will also include caching, error handling, and responsive UI.
 
-## Getting Started
+## Project details
+this project consists of 3 screens
+1. user list
+2. user details
+3. add new user
 
-This project is a starting point for a Flutter application.
+#### user list
+this screen displays the list of users retrieved from the API endpoint with the options to:\
+add a new user/
+view user's details\
+and delete an existing user (both adding and removing a user will update the endpoint)\
 
-A few resources to get you started if this is your first Flutter project:
+#### user details
+this screen displays more details about the user and allows the user to edit their details (this will also update the endpoint)\
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+#### add new user
+this screen takes the entered data and adds a new record to the users in the endpoint
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### user model 
+the user model class contains:\
+ID\
+Name\
+Age\
+Gender\
+Email\
+Phone number\
+Address\
+
+[endpoint](https://usersapi-production-4ffe.up.railway.app/docs#/)
+used packages\
+[Dio](https://pub.dev/packages/dio)
+[Shared Preferences](https://pub.dev/packages/shared_preferences)
+
+Team members:\
+Mostafa Elzohirey (coordinator)\
+Mahmoud Sobhy Awad\
+Ahmed Emad Mahmoud\
+Mohamed Salah\
+Shaza Allam\
+Menna Raafat\
