@@ -35,7 +35,7 @@ Gender\
 Email\
 Phone number\
 Address\
-
+Ui&Ux design :https://www.figma.com/design/sBPzQg1RO0wmHxRJJHVtpZ/Egy-Tour?node-id=195-6
 [endpoint](https://usersapi-production-4ffe.up.railway.app/docs#/)
 used packages\
 [Dio](https://pub.dev/packages/dio)
